@@ -89,6 +89,6 @@ if __name__ == "__main__":
     validation_data=(x_val,y_val)
     )
   score = model.evaluate(x_test, y_test, verbose=0,batch_size=128)
-  a = pd.DataFrame(score)
-  a.to_csv("resultVision20_64.csv")
+  res = pd.DataFrame(score)
+  res.to_csv("resultVision20_64.csv")
 
