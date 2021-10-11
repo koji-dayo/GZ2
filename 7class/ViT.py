@@ -64,7 +64,7 @@ if __name__ == "__main__":
   args = sys.argv
   # K Size args[1],Image Size args[2] num_classes args[3]
   size = int(args[2])
-  data_path = "../../data/data7size" + args[1]+ ".csv"
+  data_path = "../../data/data" + args[3] + "size" + args[1]+ ".csv"
   df = pd.read_csv(data_path)
   y = df['class']
 
