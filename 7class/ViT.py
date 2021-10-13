@@ -37,13 +37,13 @@ def train():
   model.summary()
   history = model.fit(x_train, y_train,
     batch_size=128,
-    epochs=20,
+    epochs=100,
     validation_data=(x_val,y_val),
     callbacks=callbacks
     )
   score = model.evaluate(x_test, y_test, verbose=0,batch_size=128)
   res = pd.DataFrame(score)
-  res.to_csv("resultVision" args[2] + "_K" + args[1] +".csv")
+  res.to_csv("resultVision" + args[2] + "_K" + args[1] +".csv")
 
 
 def build_VIT():
