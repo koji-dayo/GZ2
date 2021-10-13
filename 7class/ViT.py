@@ -23,8 +23,6 @@ from vit_keras import vit, utils
 from sklearn.model_selection import train_test_split
 from tensorflow.python.keras.callbacks import TensorBoard
 
-# TODO Early Stopping 
-# Call Back ReduceLROnPlateau
 
 def res_plot():
   plt.plot(history.epoch, history.history["accuracy"], label="accuracy")
