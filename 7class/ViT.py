@@ -4,7 +4,7 @@ import tensorflow as tf
 import numpy as np
 import sys
 import cv2
-
+import matplotlib.pyplot as plt
 # 再現性
 import os
 os.environ['PYTHONHASHSEED'] = '0'
@@ -22,6 +22,30 @@ import tensorflow_addons as tfa
 from vit_keras import vit, utils
 from sklearn.model_selection import train_test_split
 from tensorflow.python.keras.callbacks import TensorBoard
+
+# TODO Early Stopping 
+# Call Back ReduceLROnPlateau
+
+def res_plot():
+  plt.plot(history.epoch, history.history["accuracy"], label="accuracy")
+  plt.plot(history.epoch, history.history["loss"], label="loss")
+  plt.plot(history.epoch, history.history["val_accuracy"], label="val_accuracy")
+  plt.plot(history.epoch, history.history["val_loss"], label="val_loss")
+  plt.xlabel("epoch")
+  plt.legend()
+  plt.savefig("ViT" + args[3] + "classk>=" + args[1]  + ".png")
+
+def train():
+  model.summary()
+  history = model.fit(x_train, y_train,
+    batch_size=128,
+    epochs=20,
+    validation_data=(x_val,y_val)
+    )
+  score = model.evaluate(x_test, y_test, verbose=0,batch_size=128)
+  res = pd.DataFrame(score)
+  res.to_csv("resultVision" args[2] + "_K" + args[1] +".csv")
+
 
 def build_VIT():
   # パッチサイズ16
@@ -82,13 +106,24 @@ if __name__ == "__main__":
 
   # model build
   model = build_VIT()
-  model.summary()
-  history = model.fit(x_train, y_train,
-    batch_size=128,
-    epochs=20,
-    validation_data=(x_val,y_val)
-    )
-  score = model.evaluate(x_test, y_test, verbose=0,batch_size=128)
-  res = pd.DataFrame(score)
-  res.to_csv("resultVision20_64.csv")
+
+  # Early Stopping & Call Back ReduceLROnPlateau
+  reduce_lr = ReduceLROnPlateau(monitor='val_accuracy',
+                              factor=0.2,
+                              patience=2,
+                              verbose=1,
+                              min_delta=1e-4,
+                              min_lr=1e-6,
+                              mode='max'
+                             )
+  earlystopping = EarlyStopping(monitor='val_accuracy',
+                              min_delta=1e-4,
+                              patience=5,
+                              mode='max',
+                              verbose=1
+                             )
+
+  callbacks = [earlystopping, reduce_lr]
+
+  train()
 
