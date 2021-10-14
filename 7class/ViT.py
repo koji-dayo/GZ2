@@ -41,10 +41,12 @@ def train():
     validation_data=(x_val,y_val),
     callbacks=callbacks
     )
+ 
   score = model.evaluate(x_test, y_test, verbose=0,batch_size=128)
+
   res = pd.DataFrame(score)
   res.to_csv("resultVision" + args[2] + "_K" + args[1] +".csv")
-
+  model.save(args[3]+"class"+args[2]+"ImageSize"+args[1]+"Ksize" + "model")
 
 def build_VIT():
   # パッチサイズ16
